@@ -34,6 +34,9 @@
     <ClCompile Include="src\LoadedPe\LoadedPe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hooks\SSDTHooks\ZwQuerySystemInformationHooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\SSDTManager\SSDTManager.h">
@@ -49,6 +52,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Structs\Structs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hooks\SSDTHooks\ZwQuerySystemInformationHooks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\List.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

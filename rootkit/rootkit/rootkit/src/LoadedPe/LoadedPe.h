@@ -5,26 +5,35 @@
 
 #include "../Structs/Structs.h"
 
-struct LoadedPe
+class LoadedPe
 {  
+private:
     unsigned char* loadedBuffer;
 
     PeData data;
 
     NTSTATUS error;
 
+    BOOLEAN InitializePeData();
+
+    BOOLEAN InitializeLoadedBuffer(PWCHAR fileNameWC);
+
+    ULONGLONG RvaToOffset(ULONGLONG rva);
+
 public :
 
-    BOOLEAN InitializeFields(PWCHAR fileName);
+    BOOLEAN InitializeFields(PWCHAR fileNameWC);
 
     unsigned char* GetLoadedBuffer();
 
     PeData GetPeData();
 
+    ImportData FindFunctionFromImportByName(PCHAR funcName);
+
+    ExportData FindFunctionFromExportByName(PCHAR funcName);
+
     NTSTATUS GetError();
 
-    void Free();
-
-    
+    void Free();   
     
 };

@@ -4,6 +4,7 @@
 #include <windef.h>
 
 #include "../Utils/Utils.h"
+#include "../Utils/List.h"
 #include "../KernelManager/KernelManager.h"
 #include "../LoadedPe/LoadedPe.h"
 
@@ -23,9 +24,13 @@ class SSDTManager
 {
 private:
     SSDTStruct* ssdtShadow;
-    SSDTStruct* ssdt;    
+    SSDTStruct* ssdt;
+
+    PDWORD KiServiceTable;
 
     LoadedPe ntdll;
+
+    List<SSDTHook> SSDTHooks;
 
     SSDTManager() = default;
     
@@ -38,10 +43,28 @@ public:
         return instance;
     }
 
-    BOOL InitializeInstanceData();
+    BOOL InitializeInstanceData();    
 
-    
+    DWORD GetIndexSyscallFromNtdll(PCHAR funcName);
+
+    ULONG_PTR GetFuncAddres(DWORD index);
+
+    template <typename func>
+    BOOL SetHook(PCHAR funcName,func ptrFunc);
+
+    BOOL UnHook(PCHAR funcName);
+
+    void FreeData();
 
 };
 
+template<typename func>
+BOOL SSDTManager::SetHook(PCHAR funcName, func ptrFunc)
+{
+    auto funcIndexFromSSDT = this->GetIndexSyscallFromNtdll(funcName);
+    auto funcAddres = this->GetFuncAddres(funcIndexFromSSDT);
 
+
+
+    return TRUE;
+}

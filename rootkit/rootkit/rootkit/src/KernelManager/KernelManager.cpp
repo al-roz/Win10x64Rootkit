@@ -2,8 +2,7 @@
 
 BOOLEAN KernelManager::InitializeInstanceData()
 {    
-    GetNtoskrnl(&kernelData.startAddres, &kernelData.ImageSize);
-    
+    GetNtoskrnl(&kernelData.startAddres, &kernelData.ImageSize);   
 
     kernelData.dosHeader = reinterpret_cast<PIMAGE_DOS_HEADER>(kernelData.startAddres);
 
