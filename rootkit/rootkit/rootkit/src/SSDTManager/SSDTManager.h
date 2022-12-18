@@ -2,6 +2,7 @@
 #include <ntddk.h>
 #include <basetsd.h>
 #include <windef.h>
+#include <intrin.h>
 
 #include "../Utils/Utils.h"
 #include "../Utils/List.h"
@@ -20,6 +21,13 @@ struct SSDTStruct
     PCHAR pArgumentTable;
 };
 
+//Turn off write protection
+KIRQL WPOFFx64();
+
+//Open Write Protection
+void WPONx64(KIRQL irql);
+
+
 class SSDTManager
 {
 private:
@@ -36,6 +44,8 @@ private:
     
     SSDTManager(const SSDTManager&) = delete;        
 
+    DWORD FuncOffsetSSDT(ULONG_PTR func);
+
 public:
     static SSDTManager & getInstance()
     {
@@ -49,22 +59,8 @@ public:
 
     ULONG_PTR GetFuncAddres(DWORD index);
 
-    template <typename func>
-    BOOL SetHook(PCHAR funcName,func ptrFunc);
-
-    BOOL UnHook(PCHAR funcName);
+    BOOL SetFuncInSSDT(DWORD index, ULONG_PTR funcAddres);
 
     void FreeData();
 
 };
-
-template<typename func>
-BOOL SSDTManager::SetHook(PCHAR funcName, func ptrFunc)
-{
-    auto funcIndexFromSSDT = this->GetIndexSyscallFromNtdll(funcName);
-    auto funcAddres = this->GetFuncAddres(funcIndexFromSSDT);
-
-
-
-    return TRUE;
-}

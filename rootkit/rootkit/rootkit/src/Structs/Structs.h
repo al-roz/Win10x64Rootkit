@@ -40,10 +40,6 @@ struct SSDTHook
     ULONG_PTR HookFunc = 0;
     ULONG_PTR OriginalFunc = 0;
 
-    SSDTHook& operator= (DWORD dword)
-    {
-        HookFunc = 0;
-        OriginalFunc = 0;
-        return *this;
-    }
+    DWORD index = 0;
+    PCHAR funcName = NULL;
 };

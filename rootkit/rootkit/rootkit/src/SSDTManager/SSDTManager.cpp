@@ -1,6 +1,11 @@
 #include "SSDTManager.h"
 
 
+DWORD SSDTManager::FuncOffsetSSDT(ULONG_PTR func)
+{
+    return (func - reinterpret_cast<ULONG_PTR>(this->KiServiceTable)) << 4;
+}
+
 BOOL SSDTManager::InitializeInstanceData()
 {
     if (!this->ntdll.InitializeFields(L"\\SystemRoot\\system32\\ntdll.dll"))
@@ -9,33 +14,38 @@ BOOL SSDTManager::InitializeInstanceData()
     }
 
     auto indexNtCreateFile = this->GetIndexSyscallFromNtdll("NtCreateFile");
+    auto indexNtQuerySystemInformation = this->GetIndexSyscallFromNtdll("NtQuerySystemInformation");
 
-    ExportData realNtCreateFileFromExport = KernelManager::getInstance().FindFunctionFromExportByName("NtCreateFile");
-
-    if (indexNtCreateFile == -1)
+    if (indexNtCreateFile == -1 || indexNtQuerySystemInformation == -1)
     {
         return FALSE;
-    }    
+    }
+
+    ExportData realNtCreateFileFromExport = KernelManager::getInstance().FindFunctionFromExportByName("NtCreateFile");
+    ExportData realNtQuerySystemInformation = KernelManager::getInstance().FindFunctionFromExportByName("NtQuerySystemInformation");      
 
     bool found = FALSE;
     ULONG kiServiceTableOffset = 0;
     PeData kernelData = KernelManager::getInstance().GetKernelData();
     ULONG_PTR kernelBase = kernelData.startAddres;
     SIZE_T kernelSize = kernelData.ImageSize;
-
     
-
     for (; kiServiceTableOffset < kernelSize; kiServiceTableOffset++)
     {
         PDWORD supposedKiServiceTable = reinterpret_cast<PDWORD>(kernelBase + kiServiceTableOffset);        
 
-        ULONG_PTR NtCreateFileAddres = reinterpret_cast<ULONG_PTR>(supposedKiServiceTable + (*(supposedKiServiceTable + indexNtCreateFile) >> 4));        
+        auto cf = *(supposedKiServiceTable + indexNtCreateFile) >> 4;
+        auto si = *(supposedKiServiceTable + indexNtQuerySystemInformation) >> 4;
+
+
+        ULONG_PTR NtCreateFileAddres = reinterpret_cast<ULONG_PTR>((PBYTE)supposedKiServiceTable + cf);        
+        ULONG_PTR NtQuerySystemInformationAddres = reinterpret_cast<ULONG_PTR>((PBYTE)supposedKiServiceTable + si);
         
-        if ( realNtCreateFileFromExport.functionAddres == NtCreateFileAddres)
+        if ( realNtCreateFileFromExport.functionAddres == NtCreateFileAddres && 
+             realNtQuerySystemInformation.functionAddres == NtQuerySystemInformationAddres)
         {
             found = TRUE;
-            this->KiServiceTable = supposedKiServiceTable;
-            DbgBreakPoint();
+            this->KiServiceTable = supposedKiServiceTable;            
             break;
         }        
     }
@@ -77,13 +87,43 @@ ULONG_PTR SSDTManager::GetFuncAddres(DWORD index)
     return reinterpret_cast<ULONG_PTR>(this->KiServiceTable + (*(this->KiServiceTable + index) >> 4));
 }
 
-BOOL SSDTManager::UnHook(PCHAR funcName)
+BOOL SSDTManager::SetFuncInSSDT(DWORD index, ULONG_PTR funcAddres)
 {
-    return 0;
+    auto irql = WPOFFx64();
+
+    auto oldAddres = this->KiServiceTable[index];
+    
+    this->KiServiceTable[index] = this->FuncOffsetSSDT(funcAddres) | (oldAddres & 0xF);
+    auto newAddres = this->KiServiceTable[index];
+
+    DbgBreakPoint();
+    WPONx64(irql);
+
+    return TRUE;
 }
+
+
 
 void SSDTManager::FreeData()
 {
     this->ntdll.Free();    
 }
 
+KIRQL WPOFFx64()
+{
+    KIRQL irql = KeRaiseIrqlToDpcLevel();
+    UINT64 cr0 = __readcr0();
+    cr0 &= 0xfffffffffffeffff;
+    __writecr0(cr0);
+    _disable();
+    return irql;
+}
+
+void WPONx64(KIRQL irql)
+{
+    UINT64 cr0 = __readcr0();
+    cr0 |= 0x10000;
+    _enable();
+    __writecr0(cr0);
+    KeLowerIrql(irql);
+}

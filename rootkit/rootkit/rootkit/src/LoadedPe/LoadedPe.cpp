@@ -113,7 +113,7 @@ BOOLEAN LoadedPe::InitializeLoadedBuffer(PWCHAR fileNameWC)
 
 ULONGLONG LoadedPe::RvaToOffset(ULONGLONG rva)
 {
-	for (int i = 0; i < this->data.sectionsCount; ++i) {
+	for (DWORD i = 0; i < this->data.sectionsCount; ++i) {
 		if ((rva >= this->data.sectionHeader[i].VirtualAddress) &&
 			(rva <= (static_cast<ULONG_PTR>(this->data.sectionHeader[i].VirtualAddress) + this->data.sectionHeader[i].Misc.VirtualSize)))
 			return rva - this->data.sectionHeader[i].VirtualAddress + this->data.sectionHeader[i].PointerToRawData;

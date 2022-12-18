@@ -5,4 +5,6 @@
 #include <windef.h>
 
 
+
 BOOLEAN GetNtoskrnl(ULONG_PTR* kernelBase, SIZE_T* kernelSize);
+

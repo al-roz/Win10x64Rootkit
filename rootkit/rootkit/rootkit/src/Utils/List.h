@@ -36,8 +36,7 @@ class List
 		}
 
 		result->links.Blink = NULL;
-		result->links.Flink = NULL;
-		result->payload = NULL;
+		result->links.Flink = NULL;		
 		return result;
 
 	}
@@ -53,12 +52,12 @@ class List
 	}	
 
 public:
-
+		
 	List()
 	{
-		this->links.Flink = NULL;
-		this->links.Blink = NULL;
-		this->payload = NULL;
+		links.Flink = NULL;
+		links.Blink = NULL;
+
 	}
 
 	void AddElement(Type newPayload)
@@ -76,7 +75,7 @@ public:
 		{
 			if (entrys == pLinks)
 			{
-								
+						
 			}
 
 			entrys = entrys->Flink;
@@ -99,6 +98,26 @@ public:
 			tmpHead = CONTAINING_RECORD(next, List<Type>, links);
 			next = tmpHead->links.Flink;
 		}
+	}
+
+	template <typename Func>
+	Type Find(Func findFunc)
+	{
+		LIST_ENTRY* entrys = &this->links;
+
+		while (entrys->Flink != NULL)
+		{
+			entrys = entrys->Flink;
+
+			auto node = CONTAINING_RECORD(entrys, List<Type>, links);
+
+			if (findFunc(node->payload))
+			{
+				return node->payload;
+			}
+		}
+
+		return Type();
 	}
 
 	
