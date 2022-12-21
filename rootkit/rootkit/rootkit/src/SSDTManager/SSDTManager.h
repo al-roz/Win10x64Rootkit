@@ -38,8 +38,6 @@ private:
 
     LoadedPe ntdll;
 
-    List<SSDTHook> SSDTHooks;
-
     SSDTManager() = default;
     
     SSDTManager(const SSDTManager&) = delete;        

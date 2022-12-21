@@ -84,19 +84,18 @@ DWORD SSDTManager::GetIndexSyscallFromNtdll(PCHAR funcName)
 
 ULONG_PTR SSDTManager::GetFuncAddres(DWORD index)
 {
-    return reinterpret_cast<ULONG_PTR>(this->KiServiceTable + (*(this->KiServiceTable + index) >> 4));
+    return reinterpret_cast<ULONG_PTR>((PBYTE)this->KiServiceTable + (this->KiServiceTable[index] >> 4));
 }
 
 BOOL SSDTManager::SetFuncInSSDT(DWORD index, ULONG_PTR funcAddres)
 {
     auto irql = WPOFFx64();
 
-    auto oldAddres = this->KiServiceTable[index];
+    auto oldAddres = this->KiServiceTable[index];    
+    this->KiServiceTable[index] = this->FuncOffsetSSDT(funcAddres) | (oldAddres & 0xF);       
     
-    this->KiServiceTable[index] = this->FuncOffsetSSDT(funcAddres) | (oldAddres & 0xF);
-    auto newAddres = this->KiServiceTable[index];
-
     DbgBreakPoint();
+
     WPONx64(irql);
 
     return TRUE;

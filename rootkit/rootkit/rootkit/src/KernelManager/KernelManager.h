@@ -37,4 +37,7 @@ public:
 
     ExportData FindFunctionFromExportByAddres(ULONG_PTR funcAddr);
 
+    ULONG GetSectionByAddres(ULONG_PTR addres);
+
+    ULONG_PTR GetZeroMemmoryInSections(ULONG sections);
 };

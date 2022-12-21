@@ -8,3 +8,7 @@
 
 BOOLEAN GetNtoskrnl(ULONG_PTR* kernelBase, SIZE_T* kernelSize);
 
+NTSTATUS SuperCopyMemory(
+    IN VOID UNALIGNED* Destination,
+    IN CONST VOID UNALIGNED* Source,
+    IN ULONG Length);

@@ -43,3 +43,13 @@ struct SSDTHook
     DWORD index = 0;
     PCHAR funcName = NULL;
 };
+
+#pragma pack(push,1)
+struct HOOKOPCODES
+{
+    unsigned short int mov = 0xB848;
+    ULONG_PTR addr;
+    unsigned char push = 0x50;
+    unsigned char ret = 0xc3;
+};
+#pragma pack(pop)

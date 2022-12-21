@@ -3,7 +3,7 @@
 BOOL SSDTHookManagaer::SetHook(SSDTHook hook)
 {
     
-     hook.index = SSDTManager::getInstance().GetIndexSyscallFromNtdll(hook.funcName) + 1;
+     hook.index = SSDTManager::getInstance().GetIndexSyscallFromNtdll(hook.funcName);
     if (hook.index == -1)
     {
         return FALSE;
@@ -15,8 +15,17 @@ BOOL SSDTHookManagaer::SetHook(SSDTHook hook)
         return FALSE;
     }
 
-    SSDTManager::getInstance().SetFuncInSSDT(hook.index, hook.HookFunc);
-    
+    DbgBreakPoint();
+
+    auto ptrInKernelZeroMemmory = KernelManager::getInstance().GetZeroMemmoryInSections(KernelManager::getInstance().GetSectionByAddres(hook.OriginalFunc));
+
+    HOOKOPCODES opcode;
+    opcode.addr = hook.HookFunc;
+
+    SuperCopyMemory((PVOID)ptrInKernelZeroMemmory, &opcode, sizeof(HOOKOPCODES));
+
+    SSDTManager::getInstance().SetFuncInSSDT(hook.index, ptrInKernelZeroMemmory);
+    DbgBreakPoint();
     this->SSDTHooks.AddElement(hook);
 
     return TRUE;

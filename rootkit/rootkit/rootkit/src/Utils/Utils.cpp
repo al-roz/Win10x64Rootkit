@@ -49,3 +49,29 @@ BOOLEAN GetNtoskrnl(ULONG_PTR* kernelBase, SIZE_T* kernelSize)
 
     return TRUE;
 }
+
+
+NTSTATUS SuperCopyMemory(
+    IN VOID UNALIGNED* Destination,
+    IN CONST VOID UNALIGNED* Source,
+    IN ULONG Length)
+{
+    //Change memory properties.
+    PMDL g_pmdl = IoAllocateMdl(Destination, Length, 0, 0, NULL);
+    if (!g_pmdl)
+        return STATUS_UNSUCCESSFUL;
+    MmBuildMdlForNonPagedPool(g_pmdl);
+    unsigned int* Mapped = (unsigned int*)MmMapLockedPages(g_pmdl, KernelMode);
+    if (!Mapped)
+    {
+        IoFreeMdl(g_pmdl);
+        return STATUS_UNSUCCESSFUL;
+    }
+    KIRQL kirql = KeRaiseIrqlToDpcLevel();
+    RtlCopyMemory(Mapped, Source, Length);
+    KeLowerIrql(kirql);
+    //Restore memory properties.
+    MmUnmapLockedPages((PVOID)Mapped, g_pmdl);
+    IoFreeMdl(g_pmdl);
+    return STATUS_SUCCESS;
+}

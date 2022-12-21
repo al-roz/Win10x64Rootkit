@@ -12,5 +12,6 @@ extern "C"  NTSTATUS NtQuerySystemInformationHook_HideProcess(ULONG SystemInform
     auto hookData2 = SSDTHookManagaer::getInstance().GetHookByAddres(reinterpret_cast<ULONG_PTR>(&NtQuerySystemInformationHook_HideProcess));
     NT_QUERY_SYSTEM_INFORMATION originalFunc2 = reinterpret_cast<NT_QUERY_SYSTEM_INFORMATION>(hookData2.OriginalFunc);
         
-    return originalFunc(SystemInformationClass, SystemInformation, SystemInformationLength, ReturnLength);
+    auto status = originalFunc2(SystemInformationClass, SystemInformation, SystemInformationLength, ReturnLength);
+    return status;
 }

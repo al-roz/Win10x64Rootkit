@@ -124,3 +124,40 @@ ExportData KernelManager::FindFunctionFromExportByAddres(ULONG_PTR funcAddr)
 
     return ExportData{ NULL, NULL, NULL };
 }
+
+ULONG KernelManager::GetSectionByAddres(ULONG_PTR addres)
+{
+    USHORT wSections;
+    PIMAGE_SECTION_HEADER pSectionHdr;
+    auto dwRVA = addres - this->kernelData.startAddres;
+    pSectionHdr = IMAGE_FIRST_SECTION(this->kernelData.ntHeader);
+    wSections = this->kernelData.ntHeader->FileHeader.NumberOfSections;
+    for (int i = 0; i < wSections; i++)
+    {
+        if (pSectionHdr[i].VirtualAddress <= dwRVA &&
+            (pSectionHdr[i].VirtualAddress + pSectionHdr[i].Misc.VirtualSize) > dwRVA)
+            return i;
+    }
+    return (ULONG)-1;
+}
+
+ULONG_PTR KernelManager::GetZeroMemmoryInSections(ULONG sections)
+{
+    auto codeSize = this->kernelData.sectionHeader[sections].SizeOfRawData;
+    auto codeStart = this->kernelData.startAddres + this->kernelData.sectionHeader[sections].VirtualAddress;
+
+    PBYTE Code = reinterpret_cast<PBYTE>(codeStart);
+    
+    for (unsigned int i = 0, j = 0; i < codeSize; i++)
+    {
+        if (Code[i] == 0x90 || Code[i] == 0xCC)  //NOP or INT3
+            j++;
+        else
+            j = 0;
+
+        if (j == sizeof(HOOKOPCODES))
+        {
+            return  ((ULONG_PTR)codeStart + i - sizeof(HOOKOPCODES) + 1);
+        }        
+    }
+}
