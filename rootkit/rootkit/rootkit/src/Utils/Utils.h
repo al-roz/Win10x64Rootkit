@@ -3,6 +3,7 @@
 #include <aux_klib.h>
 #include <basetsd.h>
 #include <windef.h>
+#include <intrin.h>
 
 
 
@@ -12,3 +13,7 @@ NTSTATUS SuperCopyMemory(
     IN VOID UNALIGNED* Destination,
     IN CONST VOID UNALIGNED* Source,
     IN ULONG Length);
+
+KIRQL WPOFFx64();
+
+void WPONx64(KIRQL irql);

@@ -93,8 +93,6 @@ BOOL SSDTManager::SetFuncInSSDT(DWORD index, ULONG_PTR funcAddres)
 
     auto oldAddres = this->KiServiceTable[index];    
     this->KiServiceTable[index] = this->FuncOffsetSSDT(funcAddres) | (oldAddres & 0xF);       
-    
-    DbgBreakPoint();
 
     WPONx64(irql);
 
@@ -108,21 +106,3 @@ void SSDTManager::FreeData()
     this->ntdll.Free();    
 }
 
-KIRQL WPOFFx64()
-{
-    KIRQL irql = KeRaiseIrqlToDpcLevel();
-    UINT64 cr0 = __readcr0();
-    cr0 &= 0xfffffffffffeffff;
-    __writecr0(cr0);
-    _disable();
-    return irql;
-}
-
-void WPONx64(KIRQL irql)
-{
-    UINT64 cr0 = __readcr0();
-    cr0 |= 0x10000;
-    _enable();
-    __writecr0(cr0);
-    KeLowerIrql(irql);
-}

@@ -40,6 +40,15 @@
     <ClCompile Include="src\SSDTManager\SSDTHooksManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\SplicingManager\SplicingManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\hde64.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hooks\SplicingHooks\ZwDeviceIoControlFileHooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\SSDTManager\SSDTManager.h">
@@ -64,6 +73,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\SSDTManager\SSDTHooksManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SplicingManager\SplicingManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\hde64.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\table64.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\stdint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hooks\SplicingHooks\ZwDeviceIoControlFileHooks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

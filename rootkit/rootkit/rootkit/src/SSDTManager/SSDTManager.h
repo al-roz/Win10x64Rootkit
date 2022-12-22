@@ -2,7 +2,6 @@
 #include <ntddk.h>
 #include <basetsd.h>
 #include <windef.h>
-#include <intrin.h>
 
 #include "../Utils/Utils.h"
 #include "../Utils/List.h"
@@ -20,12 +19,6 @@ struct SSDTStruct
 #endif
     PCHAR pArgumentTable;
 };
-
-//Turn off write protection
-KIRQL WPOFFx64();
-
-//Open Write Protection
-void WPONx64(KIRQL irql);
 
 
 class SSDTManager

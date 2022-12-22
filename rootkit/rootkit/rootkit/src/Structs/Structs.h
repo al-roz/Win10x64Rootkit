@@ -44,6 +44,14 @@ struct SSDTHook
     PCHAR funcName = NULL;
 };
 
+struct SplicingHook
+{
+    ULONG_PTR HookFunc = 0;
+    ULONG_PTR OriginalFunc = 0;
+    ULONG_PTR wrapper = 0;
+    PCHAR funcName = NULL;
+};
+
 #pragma pack(push,1)
 struct HOOKOPCODES
 {
@@ -51,5 +59,14 @@ struct HOOKOPCODES
     ULONG_PTR addr;
     unsigned char push = 0x50;
     unsigned char ret = 0xc3;
+};
+#pragma pack(pop)
+
+#pragma pack(push,1)
+struct SPLICINGOPCODES
+{
+    unsigned short int mov = 0xB848;
+    ULONG_PTR addr;
+    unsigned short int jmp = 0xe0ff;
 };
 #pragma pack(pop)

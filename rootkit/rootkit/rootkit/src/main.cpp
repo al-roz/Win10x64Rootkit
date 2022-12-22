@@ -7,8 +7,10 @@
 
 #include "SSDTManager\SSDTManager.h"
 #include "KernelManager\KernelManager.h"
+#include "SplicingManager\SplicingManager.h"
 
 #include "Hooks\SSDTHooks\ZwQuerySystemInformationHooks.h"
+#include "Hooks\SplicingHooks\ZwDeviceIoControlFileHooks.h"
 
 #include "Utils\List.h"
 
@@ -37,17 +39,39 @@ extern "C" NTSTATUS DriverEntry(IN PDRIVER_OBJECT driverObject, IN PUNICODE_STRI
         return retStatus;
     }
 
+    if (!SplicingManager::getInstance().InitializeInstanceData())
+    {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "Splicing Manager Init error\n");
+        retStatus = STATUS_FAILED_DRIVER_ENTRY;
+        return retStatus;
+    }
+
     SSDTHook hookNtQuerySystemInformation;
 
     hookNtQuerySystemInformation.funcName = "NtQuerySystemInformation";
     hookNtQuerySystemInformation.HookFunc = reinterpret_cast<ULONG_PTR>(&NtQuerySystemInformationHook_HideProcess);
 
-    if (!SSDTHookManagaer::getInstance().SetHook(hookNtQuerySystemInformation))
+    /*if (!SSDTHookManagaer::getInstance().SetHook(hookNtQuerySystemInformation))
     {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "Set SSDT Hook error\n");
         retStatus = STATUS_FAILED_DRIVER_ENTRY;
         return retStatus;
+    }*/
+
+    SplicingHook hookZwDeviceIoControlFile;
+    hookZwDeviceIoControlFile.funcName = "NtDeviceIoControlFile"; 
+    hookZwDeviceIoControlFile.HookFunc = reinterpret_cast<ULONG_PTR>(&ZwDeviceIoControlFileHook_AddElement);
+    hookZwDeviceIoControlFile.OriginalFunc = SSDTManager::getInstance().GetFuncAddres(
+        SSDTManager::getInstance().GetIndexSyscallFromNtdll("NtDeviceIoControlFile"));
+
+
+    if (!SplicingManager::getInstance().SetHook(hookZwDeviceIoControlFile))
+    {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "Set Splicing Hook error\n");
+        retStatus = STATUS_FAILED_DRIVER_ENTRY;
+        return retStatus;
     }
+    
 
     driverObject->DriverUnload = DriverUnload;
     retStatus = STATUS_SUCCESS;
@@ -61,5 +85,6 @@ VOID DriverUnload(IN PDRIVER_OBJECT DriverObject)
     DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "Driver unload\n");
     SSDTManager::getInstance().FreeData();
     SSDTHookManagaer::getInstance().OnUnload();
+    SplicingManager::getInstance().OnUnload();
     return;
 }

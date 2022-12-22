@@ -15,8 +15,6 @@ BOOL SSDTHookManagaer::SetHook(SSDTHook hook)
         return FALSE;
     }
 
-    DbgBreakPoint();
-
     auto ptrInKernelZeroMemmory = KernelManager::getInstance().GetZeroMemmoryInSections(KernelManager::getInstance().GetSectionByAddres(hook.OriginalFunc));
 
     HOOKOPCODES opcode;
@@ -25,7 +23,7 @@ BOOL SSDTHookManagaer::SetHook(SSDTHook hook)
     SuperCopyMemory((PVOID)ptrInKernelZeroMemmory, &opcode, sizeof(HOOKOPCODES));
 
     SSDTManager::getInstance().SetFuncInSSDT(hook.index, ptrInKernelZeroMemmory);
-    DbgBreakPoint();
+
     this->SSDTHooks.AddElement(hook);
 
     return TRUE;
