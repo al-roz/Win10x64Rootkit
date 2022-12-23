@@ -49,6 +49,12 @@
     <ClCompile Include="src\Hooks\SplicingHooks\ZwDeviceIoControlFileHooks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\NtfsIRPManager\NtfsIRPManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hooks\IRPHooks\NtfsIRPHooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\SSDTManager\SSDTManager.h">
@@ -88,6 +94,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Hooks\SplicingHooks\ZwDeviceIoControlFileHooks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NtfsIRPManager\NtfsIRPManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hooks\IRPHooks\NtfsIRPHooks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

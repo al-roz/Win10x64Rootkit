@@ -15,7 +15,8 @@ BOOL SSDTHookManagaer::SetHook(SSDTHook hook)
         return FALSE;
     }
 
-    auto ptrInKernelZeroMemmory = KernelManager::getInstance().GetZeroMemmoryInSections(KernelManager::getInstance().GetSectionByAddres(hook.OriginalFunc));
+    auto ptrInKernelZeroMemmory = KernelManager::getInstance().GetZeroMemmoryInSections(
+        KernelManager::getInstance().GetSectionByAddres(hook.OriginalFunc));
 
     HOOKOPCODES opcode;
     opcode.addr = hook.HookFunc;

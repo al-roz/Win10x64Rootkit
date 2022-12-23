@@ -187,11 +187,13 @@
     <FilesToPackage Include="$(TargetPath)" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Hooks\IRPHooks\NtfsIRPHooks.cpp" />
     <ClCompile Include="src\Hooks\SplicingHooks\ZwDeviceIoControlFileHooks.cpp" />
     <ClCompile Include="src\Hooks\SSDTHooks\ZwQuerySystemInformationHooks.cpp" />
     <ClCompile Include="src\KernelManager\KernelManager.cpp" />
     <ClCompile Include="src\LoadedPe\LoadedPe.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\NtfsIRPManager\NtfsIRPManager.cpp" />
     <ClCompile Include="src\SplicingManager\SplicingManager.cpp" />
     <ClCompile Include="src\SSDTManager\SSDTHooksManager.cpp" />
     <ClCompile Include="src\SSDTManager\SSDTManager.cpp" />
@@ -199,10 +201,12 @@
     <ClCompile Include="src\Utils\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Hooks\IRPHooks\NtfsIRPHooks.h" />
     <ClInclude Include="src\Hooks\SplicingHooks\ZwDeviceIoControlFileHooks.h" />
     <ClInclude Include="src\Hooks\SSDTHooks\ZwQuerySystemInformationHooks.h" />
     <ClInclude Include="src\KernelManager\KernelManager.h" />
     <ClInclude Include="src\LoadedPe\LoadedPe.h" />
+    <ClInclude Include="src\NtfsIRPManager\NtfsIRPManager.h" />
     <ClInclude Include="src\SplicingManager\SplicingManager.h" />
     <ClInclude Include="src\SSDTManager\SSDTHooksManager.h" />
     <ClInclude Include="src\SSDTManager\SSDTManager.h" />

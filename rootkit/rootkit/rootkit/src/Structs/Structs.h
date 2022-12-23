@@ -6,6 +6,11 @@
 
 #define PNULL reinterpret_cast<PVOID>(NULL)
 
+typedef NTSTATUS(*IRP_HANDLER)(
+    IN PDEVICE_OBJECT pDeviceObject,
+    IN PIRP pIrp
+);
+
 struct PeData
 {
     ULONG_PTR startAddres;
@@ -50,6 +55,13 @@ struct SplicingHook
     ULONG_PTR OriginalFunc = 0;
     ULONG_PTR wrapper = 0;
     PCHAR funcName = NULL;
+};
+
+struct IRPHook
+{
+    DWORD IRP = -1;
+    IRP_HANDLER HookFunc = NULL;
+    IRP_HANDLER OriginalFunc = NULL;
 };
 
 #pragma pack(push,1)

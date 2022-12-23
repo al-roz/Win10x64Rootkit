@@ -90,7 +90,7 @@ public:
 		LIST_ENTRY* next = this->links.Flink->Flink;
 		List<Type>* tmpHead = CONTAINING_RECORD(this->links.Flink, List<Type>, links);
 		
-		while (next)
+		while (tmpHead)
 		{			
 			freeFunc(tmpHead->payload);
 
