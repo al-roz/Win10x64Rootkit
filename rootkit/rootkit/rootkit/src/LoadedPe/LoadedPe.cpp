@@ -36,6 +36,7 @@ BOOLEAN LoadedPe::InitializePeData()
 		this->data.exportDirectory = reinterpret_cast<PIMAGE_EXPORT_DIRECTORY>(
 			this->data.startAddres +  RvaToOffset(this->data.ntHeader->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress));
 	}
+	return TRUE;
 }
 
 BOOLEAN LoadedPe::InitializeLoadedBuffer(PWCHAR fileNameWC)

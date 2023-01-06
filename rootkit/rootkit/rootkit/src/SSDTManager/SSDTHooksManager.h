@@ -1,5 +1,12 @@
 #pragma once
+#include "../stdafx.h"
+#include "../Structs/Structs.h"
+#include "../KernelManager/KernelManager.h"
+#include "../Utils/Utils.h"
+#include "../Utils/List.h"
+
 #include "SSDTManager.h"
+
 
 class SSDTHookManagaer
 {

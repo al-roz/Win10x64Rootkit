@@ -1,12 +1,10 @@
 #pragma once
-#include <ntddk.h>
-#include <basetsd.h>
-#include <windef.h>
-
+#include "../stdafx.h"
 #include "../Utils/Utils.h"
 #include "../Utils/List.h"
 #include "../KernelManager/KernelManager.h"
 #include "../LoadedPe/LoadedPe.h"
+#include "../Structs/Structs.h"
 
 struct SSDTStruct
 {

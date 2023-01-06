@@ -1,12 +1,7 @@
 #pragma once
-#include <ntddk.h>
-#include <aux_klib.h>
-#include <basetsd.h>
-#include <windef.h>
-
+#include "../stdafx.h"
 #include "../Utils/Utils.h"
 #include "../Structs/Structs.h"
-
 
 class KernelManager
 {

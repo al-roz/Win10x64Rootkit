@@ -1,8 +1,5 @@
 #pragma once
-#include <ntddk.h>
-#include <basetsd.h>
-#include <windef.h>
-
+#include "../stdafx.h"
 #include "../Structs/Structs.h"
 
 class LoadedPe

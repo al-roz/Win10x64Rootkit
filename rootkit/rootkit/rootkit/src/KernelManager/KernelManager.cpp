@@ -160,4 +160,6 @@ ULONG_PTR KernelManager::GetZeroMemmoryInSections(ULONG sections)
             return  ((ULONG_PTR)codeStart + i - sizeof(HOOKOPCODES) + 1);
         }        
     }
+
+    return NULL;
 }

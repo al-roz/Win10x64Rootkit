@@ -1,0 +1,37 @@
+x64
+
+#define IOCTL_NSI_ENUMERATE_OBJECTS_ALL_PARAMETERS_EX   0x12001B
+#define TYPE_INFO_TCP_TABLE     0x38
+
+typedef struct _INTERNAL_TCP_TABLE_SUBENTRY {
+    
+    USHORT stub1;	//2
+    USHORT port;
+    ULONG ipAddr;
+    char stub2[20];	// 
+
+} INTERNAL_TCP_TABLE_SUBENTRY, *PINTERNAL_TCP_TABLE_SUBENTRY;
+
+
+typedef struct _NSI_PARAM {
+   //
+   // Total 70H size
+   //
+   ULONG_PTR UnknownParam1;
+   ULONG_PTR UnknownParam2;
+   void* UnknownParam3;
+   ULONG_PTR UnknownParam4;
+   ULONG UnknownParam5;
+   ULONG UnknownParam6;
+   PINTERNAL_TCP_TABLE_ENTRY tcpTable;
+   ULONG_PTR typeInfo;
+   ULONG_PTR UnknownParam9;
+   ULONG_PTR UnknownParam10;
+   PNSI_STATUS_ENTRY statusTable;
+   ULONG_PTR UnknownParam12;
+   void* UnknownParam13;
+   ULONG_PTR UnknownParam14;
+   ULONG_PTR tcpConnectionCount;
+
+} NSI_PARAM, *PNSI_PARAM;
+

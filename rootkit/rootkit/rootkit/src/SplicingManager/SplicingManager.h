@@ -1,9 +1,4 @@
 #pragma once
-
-#include <ntddk.h>
-#include <basetsd.h>
-#include <windef.h>
-
 #include "../Structs/Structs.h"
 #include "../Utils/List.h"
 #include "../Utils/hde64.h"
@@ -29,5 +24,5 @@ public:
 
     BOOL UnHook(PCHAR funcName);
 
-    BOOL OnUnload();
+    BOOL OnUnload();    
 };

@@ -55,6 +55,15 @@
     <ClCompile Include="src\Hooks\IRPHooks\NtfsIRPHooks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\RootkitHooksConfig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hooks\SplicingHooks\ZwEnumerateKeyHooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hooks\SplicingHooks\ZwQueryKeyHooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\SSDTManager\SSDTManager.h">
@@ -100,6 +109,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Hooks\IRPHooks\NtfsIRPHooks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RootkitHooksConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hooks\SplicingHooks\ZwEnumerateKeyHooks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hooks\SplicingHooks\ZwQueryKeyHooks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

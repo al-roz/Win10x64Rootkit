@@ -1,10 +1,8 @@
 #pragma once
-#include <ntddk.h>
-#include <basetsd.h>
-#include <windef.h>
-
-#include "../Utils/List.h"
+#include "../stdafx.h"
 #include "../Structs/Structs.h"
+#include "../Utils/List.h"
+
 
 class NtfsIRPManager
 {
@@ -28,7 +26,11 @@ public:
 
     BOOLEAN InitializeInstanceData();
 
-    BOOL SetHook(IRPHook hook);
+    PDEVICE_OBJECT GetDeviceObject();
+
+    BOOLEAN SetHook(IRPHook hook);
 
     IRPHook FindHook(IRP_HANDLER hookHandler);
+
+    BOOLEAN OnUnload();
 };
