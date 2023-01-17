@@ -127,18 +127,36 @@ ExportData KernelManager::FindFunctionFromExportByAddres(ULONG_PTR funcAddr)
 
 ULONG KernelManager::GetSectionByAddres(ULONG_PTR addres)
 {
-    USHORT wSections;
+    USHORT sectionsCount;
     PIMAGE_SECTION_HEADER pSectionHdr;
     auto dwRVA = addres - this->kernelData.startAddres;
     pSectionHdr = IMAGE_FIRST_SECTION(this->kernelData.ntHeader);
-    wSections = this->kernelData.ntHeader->FileHeader.NumberOfSections;
-    for (int i = 0; i < wSections; i++)
+    sectionsCount = this->kernelData.ntHeader->FileHeader.NumberOfSections;
+    for (int i = 0; i < sectionsCount; i++)
     {
         if (pSectionHdr[i].VirtualAddress <= dwRVA &&
             (pSectionHdr[i].VirtualAddress + pSectionHdr[i].Misc.VirtualSize) > dwRVA)
             return i;
     }
     return (ULONG)-1;
+}
+
+ULONG_PTR KernelManager::GetSectionByName(PCHAR sectionName, OUT SIZE_T* sizeOut)
+{
+    USHORT sectionsCount = this->kernelData.ntHeader->FileHeader.NumberOfSections;
+    PIMAGE_SECTION_HEADER sectionsHeader = IMAGE_FIRST_SECTION(this->kernelData.ntHeader);
+    
+    for (int i = 0; i < sectionsCount; i++)
+    {
+        auto name = reinterpret_cast<const char*>(sectionsHeader[i].Name);
+        if (!strcmp(sectionName, reinterpret_cast<const char*>(sectionsHeader[i].Name))) {
+            if (sizeOut)
+                *sizeOut = sectionsHeader[i].Misc.VirtualSize;
+            return this->kernelData.startAddres + sectionsHeader[i].VirtualAddress;
+        }        
+
+    }
+    return {};
 }
 
 ULONG_PTR KernelManager::GetZeroMemmoryInSections(ULONG sections)

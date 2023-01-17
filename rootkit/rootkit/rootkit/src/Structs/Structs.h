@@ -1,6 +1,6 @@
 #pragma once
 #include "../stdafx.h"
-
+#include "../Utils/List.h"
 #define PNULL reinterpret_cast<PVOID>(NULL)
 
 typedef NTSTATUS(*IRP_HANDLER)(
@@ -210,10 +210,14 @@ typedef struct _NSI_PARAM
 } NSI_PARAM, * PNSI_PARAM;
 #pragma pack(pop)
 
-struct Process
+struct ProcessPID
 {
-    DWORD PID;
-    PCHAR Name;
+    DWORD PID;    
+};
+
+struct ProcessName
+{
+    PWCHAR name;
 };
 
 struct SubKey
@@ -221,3 +225,111 @@ struct SubKey
     PWCHAR subKeyName;
     ULONG subKeyNameLength;
 };
+
+struct RegKey
+{
+    PWCHAR registryName;
+    ULONG registryLength;
+};
+
+struct RegistryKey
+{
+    PWCHAR registryName;
+    ULONG registryLength;
+    List<SubKey> subkeysList;
+};
+
+
+
+enum ComandType
+{
+    ComandAddRegisetryKey = 0,
+    ComandAddHideProccessByName,
+    ComandAddHideProccessByPID,
+    ComandAddTcp,
+    ComandChangeFileName
+};
+
+struct BasicStruct
+{
+    ComandType comandType;    
+    PVOID comandClass;
+};
+
+struct RegisterClass
+{
+    SubKey subKey;
+    RegKey regKey;
+};
+
+struct TcpClass
+{
+    ULONG localIP;
+    USHORT localPort;
+    ULONG remoteIP;
+    USHORT remotePort;
+};
+
+
+enum ETWTRACECONTROLCODE {
+    EtwStartLoggerCode = 0x1,
+    EtwStopLoggerCode,
+    EtwQueryLoggerCode,
+    EtwUpdateLoggerCode,
+    EtwFlushLoggerCode,
+    EtwActivityIdCreate = 0x0C,
+    EtwWdiScenarioCode,
+    EtwWdiSemUpdate = 0x14
+};
+
+typedef struct _WNODE_HEADER
+{
+    ULONG BufferSize;        // Size of entire buffer inclusive of this ULONG
+    ULONG ProviderId;    // Provider Id of driver returning this buffer
+    union
+    {
+        ULONG64 HistoricalContext;  // Logger use
+        struct
+        {
+            ULONG Version;           // Reserved
+            ULONG Linkage;           // Linkage field reserved for WMI
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME;
+
+    union
+    {
+        ULONG CountLost;         // Reserved
+        HANDLE KernelHandle;     // Kernel handle for data block
+        LARGE_INTEGER TimeStamp; // Timestamp as returned in units of 100ns
+                                 // since 1/1/1601
+    } DUMMYUNIONNAME2;
+    GUID Guid;                  // Guid for data block returned with results
+    ULONG ClientContext;
+    ULONG Flags;             // Flags, see below
+} WNODE_HEADER, * PWNODE_HEADER;
+
+typedef struct _EVENT_TRACE_PROPERTIES {
+    WNODE_HEADER Wnode;
+    ULONG BufferSize;
+    ULONG MinimumBuffers;
+    ULONG MaximumBuffers;
+    ULONG MaximumFileSize;
+    ULONG LogFileMode;
+    ULONG FlushTimer;
+    ULONG EnableFlags;
+    LONG AgeLimit;
+    ULONG NumberOfBuffers;
+    ULONG FreeBuffers;
+    ULONG EventsLost;
+    ULONG BuffersWritten;
+    ULONG LogBuffersLost;
+    ULONG RealTimeBuffersLost;
+    HANDLE LoggerThreadId;
+    ULONG LogFileNameOffset;
+    ULONG LoggerNameOffset;
+} EVENT_TRACE_PROPERTIES, * PEVENT_TRACE_PROPERTIES;
+
+typedef struct _CKCL_TRACE_PROPERTIES : EVENT_TRACE_PROPERTIES {
+    ULONG64	Unknown[3];
+    UNICODE_STRING ProviderName;
+} CKCL_TRACE_PROPERTIES, * PCKCL_TRACE_PROPERTIES;

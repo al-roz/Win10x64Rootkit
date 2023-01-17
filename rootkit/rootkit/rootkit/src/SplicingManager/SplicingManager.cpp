@@ -62,8 +62,6 @@ BOOL SplicingManager::SetHook(SplicingHook hook)
 	
 	WPONx64(irql);			
 
-	DbgBreakPoint();
-
 	return TRUE;
 }
 

@@ -34,5 +34,7 @@ public:
 
     ULONG GetSectionByAddres(ULONG_PTR addres);
 
+    ULONG_PTR GetSectionByName(PCHAR sectionName, OUT SIZE_T* sizeOut);
+
     ULONG_PTR GetZeroMemmoryInSections(ULONG sections);
 };

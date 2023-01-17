@@ -3,7 +3,7 @@
 BOOL SSDTHookManagaer::SetHook(SSDTHook hook)
 {
     
-     hook.index = SSDTManager::getInstance().GetIndexSyscallFromNtdll(hook.funcName);
+    hook.index = SSDTManager::getInstance().GetIndexSyscallFromNtdll(hook.funcName);
     if (hook.index == -1)
     {
         return FALSE;

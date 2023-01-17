@@ -15,7 +15,7 @@ class List
 	LIST_ENTRY links;
 	Type payload;
 
-	SIZE_T size;
+
 
 	void SetLinks(List<Type>* fElem, List<Type>* sElem)
 	{
@@ -53,8 +53,7 @@ public:
 	List()
 	{
 		links.Flink = NULL;
-		links.Blink = NULL;
-		size = 0;
+		links.Blink = NULL;		
 	}
 
 	void AddElement(Type newPayload)
@@ -62,8 +61,7 @@ public:
 		auto lastElent = this->GetLastElement();
 		auto newElemnt = this->GenerateEmptyElement();
 		newElemnt->payload = newPayload;
-		this->SetLinks(lastElent, newElemnt);
-		++size;
+		this->SetLinks(lastElent, newElemnt);		
 	}
 
 	void DeleteElement(LIST_ENTRY* pLinks)
@@ -77,8 +75,7 @@ public:
 			}
 
 			entrys = entrys->Flink;
-		}
-		--size;
+		}		
 		return CONTAINING_RECORD(entrys, List<Type>, links);
 	}
 
@@ -124,7 +121,7 @@ public:
 	
 
 	template <typename Func>
-	BOOL Ñontains(Func findFunc)
+	BOOL Contains(Func findFunc)
 	{
 		LIST_ENTRY* entrys = &this->links;
 
@@ -159,7 +156,16 @@ public:
 
 	SIZE_T Size()
 	{
-		return this->size;
+		List<Type>* tmpHead = CONTAINING_RECORD(this->links.Flink, List<Type>, links);
+
+		int i = 1;
+		while (tmpHead->links.Flink)
+		{
+			tmpHead = CONTAINING_RECORD(tmpHead->links.Flink, List<Type>, links);
+			i++;
+		}
+
+		return i;
 	}
 
 	Type GetNodeByIndex(SIZE_T index)
@@ -169,10 +175,25 @@ public:
 		int i = 0;
 		while (i != index)
 		{			
-			tmpHead = CONTAINING_RECORD(tmpHead->links.Flink, List<Type>, links);;
+			tmpHead = CONTAINING_RECORD(tmpHead->links.Flink, List<Type>, links);
 			i++;
 		}
 
-		return tmpHead;
+		return tmpHead->payload;
+	}
+
+	LIST_ENTRY GetLinks()
+	{
+		return this->links;
+	}
+
+	List<Type> Next()
+	{
+		return *CONTAINING_RECORD(this->links.Flink, List<Type>, links);
+	}
+
+	Type GetCurrentNode()
+	{
+		return this->payload;
 	}
 };

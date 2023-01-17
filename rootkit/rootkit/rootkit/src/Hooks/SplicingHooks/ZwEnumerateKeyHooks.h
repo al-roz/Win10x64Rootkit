@@ -13,7 +13,7 @@ typedef NTSTATUS(*ZW_ENUMERATE_KEY)(
     OUT PULONG  ResultLength
     );
 
-extern "C" NTSTATUS ZwEnumerateKeyHook_AnatherKeys(
+extern "C" NTSTATUS ZwEnumerateKeyHook_AnotherKeys(
     IN HANDLE  KeyHandle,
     IN ULONG  Index,
     IN KEY_INFORMATION_CLASS  KeyInformationClass,

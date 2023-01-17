@@ -7,3 +7,4 @@
 #include <intrin.h>
 #include <tdiinfo.h>
 #include <tcpmib.h>
+#include <evntrace.h>

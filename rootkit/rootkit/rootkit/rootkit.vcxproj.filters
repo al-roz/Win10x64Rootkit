@@ -64,6 +64,12 @@
     <ClCompile Include="src\Hooks\SplicingHooks\ZwQueryKeyHooks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hooks\SSDTHooks\NtAlpcOpenSenderThreadHooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PathcGuard\InfHooksManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\SSDTManager\SSDTManager.h">
@@ -123,5 +129,16 @@
     <ClInclude Include="src\Hooks\SplicingHooks\ZwQueryKeyHooks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hooks\SSDTHooks\NtAlpcOpenSenderThreadHooks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PathcGuard\InfHooksManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="src\Hook.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
   </ItemGroup>
 </Project>

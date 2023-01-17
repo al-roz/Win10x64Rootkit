@@ -2,6 +2,7 @@
 #include "../../stdafx.h"
 #include "../../SSDTManager/SSDTHooksManager.h"
 #include "../../SplicingManager/SplicingManager.h"
+#include "../../PathcGuard/InfHooksManager.h"
 
 
 #define SystemProcessesAndThreadsInformation 5
@@ -19,3 +20,9 @@ extern "C" NTSTATUS NtQuerySystemInformationHook_HideProcess(
         PVOID SystemInformation,
         ULONG SystemInformationLength,
         PULONG ReturnLength);
+
+extern "C" NTSTATUS NtQuerySystemInformationHook_testInf(
+    ULONG SystemInformationClass,
+    PVOID SystemInformation,
+    ULONG SystemInformationLength,
+    PULONG ReturnLength);

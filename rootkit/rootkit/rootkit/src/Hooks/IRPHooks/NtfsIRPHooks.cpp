@@ -8,6 +8,8 @@ NTSTATUS HookDirectoryControl(IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp)
 	auto pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 	auto listDirBuffer = pIrp->UserBuffer;
 	auto infoClass = pIrpStack->Parameters.QueryDirectory.FileInformationClass;
+
+    //TODO : list
     wchar_t fileName[] = L"hidefile.txt";
 
 	BOOLEAN captured;

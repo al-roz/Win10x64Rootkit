@@ -1,11 +1,21 @@
 #include "RootkitHooksConfig.h"
 
-List<Process> RootkitHooksConfig::getHiddenProcessList()
+List<ProcessName>& RootkitHooksConfig::GetHiddenProcessByNameList()
 {
-	return this->hiddenProcessesList;
+	return this->hiddenProcessesByNameList;
 }
 
-List<RegistryKey> RootkitHooksConfig::getRegistryList()
+List<ProcessPID>& RootkitHooksConfig::GetHiddenProcessByPIDList()
+{
+	return this->hiddenProcessesByPIDList;
+}
+
+List<RegistryKey>& RootkitHooksConfig::GetRegistryList()
 {
 	return this->RegistryList;
+}
+
+List<INTERNAL_TCP_TABLE_ENTRY>& RootkitHooksConfig::GetTcpEntryList()
+{
+	return this->tcpEntryList;
 }

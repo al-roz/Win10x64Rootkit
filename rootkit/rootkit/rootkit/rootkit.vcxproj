@@ -121,9 +121,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
+    <IncludePath>$(CRT_IncludePath);$(KM_IncludePath);$(KIT_SHARED_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
+    <IncludePath>$(CRT_IncludePath);$(KM_IncludePath);$(KIT_SHARED_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
@@ -171,6 +173,8 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <WarningLevel>Level4</WarningLevel>
+      <EnableModules>true</EnableModules>
+      <ControlFlowGuard>false</ControlFlowGuard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -185,6 +189,8 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <WarningLevel>Level4</WarningLevel>
+      <EnableModules>true</EnableModules>
+      <ControlFlowGuard>false</ControlFlowGuard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -195,11 +201,13 @@
     <ClCompile Include="src\Hooks\SplicingHooks\ZwDeviceIoControlFileHooks.cpp" />
     <ClCompile Include="src\Hooks\SplicingHooks\ZwEnumerateKeyHooks.cpp" />
     <ClCompile Include="src\Hooks\SplicingHooks\ZwQueryKeyHooks.cpp" />
+    <ClCompile Include="src\Hooks\SSDTHooks\NtAlpcOpenSenderThreadHooks.cpp" />
     <ClCompile Include="src\Hooks\SSDTHooks\ZwQuerySystemInformationHooks.cpp" />
     <ClCompile Include="src\KernelManager\KernelManager.cpp" />
     <ClCompile Include="src\LoadedPe\LoadedPe.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\NtfsIRPManager\NtfsIRPManager.cpp" />
+    <ClCompile Include="src\PathcGuard\InfHooksManager.cpp" />
     <ClCompile Include="src\RootkitHooksConfig.cpp" />
     <ClCompile Include="src\SplicingManager\SplicingManager.cpp" />
     <ClCompile Include="src\SSDTManager\SSDTHooksManager.cpp" />
@@ -212,10 +220,12 @@
     <ClInclude Include="src\Hooks\SplicingHooks\ZwDeviceIoControlFileHooks.h" />
     <ClInclude Include="src\Hooks\SplicingHooks\ZwEnumerateKeyHooks.h" />
     <ClInclude Include="src\Hooks\SplicingHooks\ZwQueryKeyHooks.h" />
+    <ClInclude Include="src\Hooks\SSDTHooks\NtAlpcOpenSenderThreadHooks.h" />
     <ClInclude Include="src\Hooks\SSDTHooks\ZwQuerySystemInformationHooks.h" />
     <ClInclude Include="src\KernelManager\KernelManager.h" />
     <ClInclude Include="src\LoadedPe\LoadedPe.h" />
     <ClInclude Include="src\NtfsIRPManager\NtfsIRPManager.h" />
+    <ClInclude Include="src\PathcGuard\InfHooksManager.h" />
     <ClInclude Include="src\RootkitHooksConfig.h" />
     <ClInclude Include="src\SplicingManager\SplicingManager.h" />
     <ClInclude Include="src\SSDTManager\SSDTHooksManager.h" />
@@ -227,6 +237,9 @@
     <ClInclude Include="src\Utils\stdint.h" />
     <ClInclude Include="src\Utils\table64.h" />
     <ClInclude Include="src\Utils\Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="src\Hook.asm" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -21,3 +21,5 @@ NTSTATUS CheckReqForMatchRegisterInList(HANDLE keyHandle, OUT RegistryKey& key);
 BOOL wstrnotnull(WSTRING str, WSTRING substr);
 
 void PrintNonullStr(PWCHAR buffer, ULONGLONG length);
+
+ULONG_PTR findBySignature(PBYTE baseAddres, SIZE_T baseLenght, PBYTE pattern, SIZE_T patternLenght);

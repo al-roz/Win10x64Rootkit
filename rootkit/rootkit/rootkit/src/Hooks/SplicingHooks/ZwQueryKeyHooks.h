@@ -45,6 +45,7 @@ NTSTATUS GetEnmurateClass(HANDLE keyHandle, KEY_INFORMATION_CLASS keyInfoClass ,
 template <typename PInformationClass>
 void ChangeInformation(PInformationClass informationClass, RegistryKey& key)
 {
+    DbgBreakPoint();
     informationClass->SubKeys = key.subkeysList.Size();
 }
 

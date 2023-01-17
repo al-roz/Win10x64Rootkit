@@ -4,7 +4,7 @@
 #include "../../Structs/Structs.h"
 
 #define HTONS(a)  (((0xFF&a)<<8) + ((0xFF00&a)>>8)) 
-#define IP_ADDR(a,b,c,d) ((a << 24) + (b << 16) + (c << 8) + d)
+#define IP_ADDR(a,b,c,d) ((d << 24) + (c << 16) + (b << 8) + a)
 
 typedef NTSTATUS(*ZW_DEVICE_IO_CONTROL_FILE)(
     IN HANDLE  FileHandle,

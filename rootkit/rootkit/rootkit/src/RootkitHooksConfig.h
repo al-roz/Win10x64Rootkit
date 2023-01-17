@@ -2,20 +2,18 @@
 #include "Structs\Structs.h"
 #include "Utils\List.h"
 
-struct RegistryKey
-{
-    PWCHAR registryName;
-    ULONG registryLength;
-    List<SubKey> subkeysList;
-};
-
 class RootkitHooksConfig
 {    
-    List<Process> hiddenProcessesList;
+    List<ProcessName> hiddenProcessesByNameList;
+    List<ProcessPID> hiddenProcessesByPIDList;
     List<RegistryKey> RegistryList;
-public:
+    List<INTERNAL_TCP_TABLE_ENTRY> tcpEntryList;
 
+    RootkitHooksConfig() = default;
+
+    RootkitHooksConfig(const RootkitHooksConfig&) = delete;
     
+public:    
 
     static RootkitHooksConfig& getInstance()
     {
@@ -23,7 +21,11 @@ public:
         return instance;
     }
 
-    List<Process> getHiddenProcessList();
+    List<ProcessName>& GetHiddenProcessByNameList();
+    
+    List<ProcessPID>& GetHiddenProcessByPIDList();
 
-    List<RegistryKey> getRegistryList();
+    List<RegistryKey>& GetRegistryList();
+
+    List<INTERNAL_TCP_TABLE_ENTRY>& GetTcpEntryList();
 };

@@ -50,6 +50,8 @@ public:
 
     BOOL SetFuncInSSDT(DWORD index, ULONG_PTR funcAddres);
 
+    PDWORD GetServiceTable();
+
     void FreeData();
 
 };

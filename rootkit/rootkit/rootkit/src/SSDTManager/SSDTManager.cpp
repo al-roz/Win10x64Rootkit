@@ -99,6 +99,11 @@ BOOL SSDTManager::SetFuncInSSDT(DWORD index, ULONG_PTR funcAddres)
     return TRUE;
 }
 
+PDWORD SSDTManager::GetServiceTable()
+{
+    return this->KiServiceTable;
+}
+
 
 
 void SSDTManager::FreeData()
